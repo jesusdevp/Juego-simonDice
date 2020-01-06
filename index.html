@@ -9,15 +9,30 @@
   </head>
   <body>
     <div class="title"><h1>Simon Dice</h1></div>
-    <div class="gameboard">
-      <div id="celeste" class="color celeste left" data-color="celeste"></div>
-      <div id="violeta" class="color violeta right" data-color="violeta"></div>
-      <div id="naranja" class="color naranja left" data-color="naranja"></div>
-      <div id="verde" class="color verde right" data-color="verde"></div>
+    <div class="container">
+      <div class="gameboard">
+        <div id="celeste" class="color celeste left" data-color="celeste"></div>
+        <div
+          id="violeta"
+          class="color violeta right"
+          data-color="violeta"
+        ></div>
+        <div id="naranja" class="color naranja left" data-color="naranja"></div>
+        <div id="verde" class="color verde right" data-color="verde"></div>
+        <div class="center">
+          <div class="time-center"><span id="time">0</span></div>
+        </div>
+      </div>
       <button id="btnEmpezar" class="btn-start" onclick="empezarJuego()">
         Empezar a jugar!
       </button>
+      <div class="footer">
+        <ul>
+          Pulsa en el botón para jugar!
+        </ul>
+      </div>
     </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <script src="app.js"></script>
   </body>
