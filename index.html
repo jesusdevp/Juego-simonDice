@@ -1,39 +1,69 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Simon Dice</title>
+    <title>Simon Says</title>
     <link rel="stylesheet" href="css/styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <div class="title"><h1>Simon Dice</h1></div>
+    <header class="header">
+      <div class="title">¡Simon Says!</div>
+    </header>
     <div class="container">
-      <div class="gameboard">
-        <div id="celeste" class="color celeste left" data-color="celeste"></div>
-        <div
-          id="violeta"
-          class="color violeta right"
-          data-color="violeta"
-        ></div>
-        <div id="naranja" class="color naranja left" data-color="naranja"></div>
-        <div id="verde" class="color verde right" data-color="verde"></div>
-        <div class="center">
-          <div class="time-center"><span id="time">0</span></div>
+      <div class="container-dashboard">
+        <div class="dashboard">
+          <ul>
+            <li>
+              <b>Player:</b>
+              <span id="name">Anonymous</span>
+            </li>
+            <li>
+              <b>Level:</b>
+              <span id="level">--</span>
+            </li>
+            <li><b>Time:</b> <span id="time">--</span><span> s</span></li>
+            <li>
+              <b>Speed:</b>
+              <span id="speed">--</span>
+            </li>
+            <li>
+              <b>Levels:</b>
+              <span>10</span>
+            </li>
+          </ul>
         </div>
       </div>
-      <button id="btnEmpezar" class="btn-start" onclick="empezarJuego()">
-        Empezar a jugar!
-      </button>
-      <div class="footer">
-        <ul>
-          Pulsa en el botón para jugar!
-        </ul>
+      <div class="container-gameboard">
+        <div class="gameboard">
+          <div
+            id="celeste"
+            class="color celeste left"
+            data-color="celeste"
+          ></div>
+          <div
+            id="violeta"
+            class="color violeta right"
+            data-color="violeta"
+          ></div>
+          <div
+            id="naranja"
+            class="color naranja left"
+            data-color="naranja"
+          ></div>
+          <div id="verde" class="color verde right" data-color="verde"></div>
+        </div>
+        <button id="btnEmpezar" class="btn-start" onclick="empezarJuego()">
+          Start to Play
+        </button>
       </div>
     </div>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-    <script src="app.js"></script>
+    <script src="./app.js"></script>
   </body>
 </html>

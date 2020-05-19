@@ -1,30 +1,58 @@
+const nombre = document.getElementById("name");
+const nivel = document.getElementById("level");
+const tiempo = document.getElementById("time");
+const velocidad = document.getElementById("speed");
 const celeste = document.getElementById("celeste");
 const violeta = document.getElementById("violeta");
 const naranja = document.getElementById("naranja");
 const verde = document.getElementById("verde");
 const btnEmpezar = document.getElementById("btnEmpezar");
 const ULTIMO_NIVEL = 10;
+let timer;
 
 class Juego {
   constructor() {
-    this.inicializar = this.inicializar.bind(this);
     this.inicializar();
-    this.generarSecuencia();
-    setTimeout(this.siguienteNivel, 500);
   }
 
   inicializar() {
+    this.inicializar = this.inicializar.bind(this);
     this.siguienteNivel = this.siguienteNivel.bind(this);
     this.elegirColor = this.elegirColor.bind(this);
     this.toggleBtnEmpezar();
-
-    this.nivel = 1;
+    this.actulizarDetalles();
+    this.timeSpeed = 350;
     this.colores = {
       celeste,
       violeta,
       naranja,
-      verde
+      verde,
     };
+  }
+
+  reiniciar() {
+    this.inicializar;
+  }
+
+  actulizarDetalles() {
+    swal({
+      title: "¡Simon Says!",
+      text: "Enter your name:",
+      content: "input",
+      button: "Go",
+    }).then((name) => {
+      if (name) {
+        nombre.innerHTML = this.name = name;
+      } else {
+        nombre.innerHTML = "Anonymous";
+      }
+      nivel.innerHTML = this.level = 1;
+      tiempo.innerHTML = this.counter = 15;
+      velocidad.innerHTML = this.speed = 1;
+      this.generarSecuencia();
+      setTimeout(this.siguienteNivel, 500);
+      this.temporizador();
+    });
   }
 
   toggleBtnEmpezar() {
@@ -35,20 +63,51 @@ class Juego {
     }
   }
 
+  temporizador() {
+    this.timer = setInterval(() => {
+      this.counter--;
+      if (this.counter < 0) {
+        clearInterval(this.timer);
+        this.perdioElJuego();
+      } else {
+        tiempo.innerText = this.counter;
+      }
+    }, 1000);
+  }
+
   generarSecuencia() {
     this.secuencia = new Array(ULTIMO_NIVEL)
       .fill(0)
-      .map(n => Math.floor(Math.random() * 4));
+      .map((n) => Math.floor(Math.random() * 4));
   }
 
   siguienteNivel() {
-    this.subnivel = 0;
+    this.subLevel = 0;
+    nivel.innerHTML = this.level;
     this.iluminarSecuencia();
     this.agregarEventosClick();
   }
 
-  transformarNumeroAColor(num) {
-    switch (num) {
+  Velocidad() {
+    switch (this.level) {
+      case 4:
+        this.timeSpeed = 250;
+        this.speed++;
+        break;
+      case 6:
+        this.timeSpeed = 150;
+        this.speed++;
+        break;
+      case 9:
+        this.timeSpeed = 50;
+        this.speed++;
+        break;
+    }
+    velocidad.innerHTML = this.speed;
+  }
+
+  transformarNumeroAColor(numero) {
+    switch (numero) {
       case 0:
         return "celeste";
       case 1:
@@ -68,13 +127,13 @@ class Juego {
         return 1;
       case "naranja":
         return 2;
-      case verde:
+      case "verde":
         return 3;
     }
   }
 
   iluminarSecuencia() {
-    for (let i = 0; i < this.nivel; i++) {
+    for (let i = 0; i < this.level; i++) {
       const color = this.transformarNumeroAColor(this.secuencia[i]);
       setTimeout(() => this.iluminarColor(color), 1000 * i);
     }
@@ -82,7 +141,7 @@ class Juego {
 
   iluminarColor(color) {
     this.colores[color].classList.add("light");
-    setTimeout(() => this.apagarColor(color), 350);
+    setTimeout(() => this.apagarColor(color), this.timeSpeed);
   }
 
   apagarColor(color) {
@@ -91,9 +150,9 @@ class Juego {
 
   agregarEventosClick() {
     this.colores.celeste.addEventListener("click", this.elegirColor);
-    this.colores.verde.addEventListener("click", this.elegirColor);
     this.colores.violeta.addEventListener("click", this.elegirColor);
     this.colores.naranja.addEventListener("click", this.elegirColor);
+    this.colores.verde.addEventListener("click", this.elegirColor);
   }
 
   eliminarEventosClick() {
@@ -103,39 +162,61 @@ class Juego {
     this.colores.naranja.removeEventListener("click", this.elegirColor);
   }
 
-  elegirColor(ev) {
-    const nombreColor = ev.target.dataset.color;
+  elegirColor(e) {
+    const nombreColor = e.target.dataset.color;
     const numeroColor = this.transformarColorANumero(nombreColor);
     this.iluminarColor(nombreColor);
-    if (numeroColor === this.secuencia[this.subnivel]) {
-      this.subnivel++;
-      if (this.subnivel === this.nivel) {
-        this.nivel++;
+
+    if (numeroColor === this.secuencia[this.subLevel]) {
+      this.subLevel++;
+      if (this.subLevel === this.level) {
+        this.level++;
         this.eliminarEventosClick();
-        if (this.nvel === ULTIMO_NIVEL + 1) {
+        if (this.level === ULTIMO_NIVEL + 1) {
+          clearInterval(this.timer);
           this.ganoElJuego();
         } else {
-          setTimeout(this.siguienteNivel, 1500);
+          clearInterval(this.timer);
+          swal({
+            text: `Very Good! Next Level: ${this.level}`,
+            icon: "success",
+            timer: 2000,
+            buttons: false,
+          }).then(() => {
+            tiempo.innerHTML = this.counter = 15;
+            this.Velocidad();
+            this.temporizador();
+            setTimeout(this.siguienteNivel(), 1500);
+          });
         }
       }
     } else {
       this.perdioElJuego();
+      clearInterval(this.timer);
     }
   }
 
   ganoElJuego() {
-    swal("Ganaste!", "Felicitaciones, ganaste el juego!", "success").then(
-      this.inicializar.bind(this)
-    );
+    swal({
+      title: "¡Simon Says!",
+      text: `Congratulations ${this.name}, You completed the game`,
+      icon: "success",
+    }).then(() => {
+      this.eliminarEventosClick();
+      this.toggleBtnEmpezar();
+    });
   }
 
   perdioElJuego() {
-    swal("Perdiste", "Lo lamentamos, vuelve a intentarlo :(", "error").then(
-      () => {
-        this.eliminarEventosClick();
-        this.inicializar();
-      }
-    );
+    swal({
+      title: "¡Simon Says!",
+      text: `You lost ${this.name}, you reached the level ${this.level}. `,
+      icon: "error",
+      button: "Try again",
+    }).then(() => {
+      this.eliminarEventosClick();
+      this.toggleBtnEmpezar();
+    });
   }
 }
 
