@@ -7,6 +7,7 @@ const violeta = document.getElementById("violeta");
 const naranja = document.getElementById("naranja");
 const verde = document.getElementById("verde");
 const btnEmpezar = document.getElementById("btnEmpezar");
+const btnInfo = document.getElementById("btnInfo");
 const ULTIMO_NIVEL = 10;
 let timer;
 
@@ -218,6 +219,15 @@ class Juego {
       this.toggleBtnEmpezar();
     });
   }
+}
+
+function gameInfo() {
+  swal({
+    icon: "info",
+    title: "¡Simón Says!",
+    text:
+      "Instruccions:\n\nMemorize the color sequence, repeat it and finish the game\n\n Good luck!",
+  });
 }
 
 function empezarJuego() {
